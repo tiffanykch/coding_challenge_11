@@ -66,3 +66,35 @@ console.log(borrower1.borrowedBooks);
 
 borrower1.returnBook("The Great Gatsby");
 console.log(borrower1.borrowedBooks);
+
+// TASK 3: CREATING A LIBRARY CLASS
+
+// Creating Library class containing book and borrower details
+class Library {
+    constructor() {
+        this.books = [];
+        this.borrowers = [];
+    }
+
+    // Method to add new book to the library
+    addBook(book) {
+
+        // Check if book already instantiated by Book class
+        if (book instanceof Book) {
+            this.books.push(book);
+        } else {
+            console.log(`Please provide valid book instance.`)
+        }
+    }
+
+    // Method to log all books' details
+    listBooks() {
+        this.books.forEach(borrower => console.log(borrower.getDetails()))
+    }
+
+}
+
+// Test Case
+const library = new Library();
+library.addBook(book1);
+library.listBooks();
