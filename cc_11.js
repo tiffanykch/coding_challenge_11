@@ -101,14 +101,14 @@ class Library {
     }
 
     // TASK 4: IMPLEMENTING BOOK BORROWING
-       // Method to allow members to borrow books if they are available
+    // Method to allow members to borrow books if they are available
     lendBook(borrowerId, isbn) {
 
         // Identify book in array using isbn
-        const bookIndex = this.books.findIndex(book => book.isbn === isbn);
+        let bookIndex = this.books.findIndex(book => book.isbn === isbn);
 
         // Identify borrower in array using borrower ID
-        const borrowerIndex = this.borrowers.findIndex(borrower => borrower.borrowerId === borrowerId);
+        let borrowerIndex = this.borrowers.findIndex(borrower => borrower.borrowerId === borrowerId);
         let borrower = this.borrowers[borrowerIndex];
               
         // Check if book exists and has available copies
@@ -126,6 +126,33 @@ class Library {
             return `Book not available.`;
         }
     }
+
+    // TASK 5: IMPLEMENTING BOOK RETURNS
+    // Method to record returned books and update book availability
+    returnBook(borrowerId, isbn) {
+        
+        // Identify book in array using isbn
+        let bookIndex = this.books.findIndex(book => book.isbn === isbn);
+
+        // Identify borrower in array using borrower ID
+        let borrowerIndex = this.borrowers.findIndex(borrower => borrower.borrowerId === borrowerId);
+        let borrower = this.borrowers[borrowerIndex];
+              
+        // Check if book exists
+        if (bookIndex !== -1) {
+
+            // Increases book copies by 1
+            this.books[bookIndex].copies += 1;
+
+            // Updates borrower's borrowedBooks list
+            if (borrowerIndex !== -1) {
+                borrower.returnBook(this.books[bookIndex].title);
+            }
+
+        } else {
+            return `Book returned unsuccessfully.`;
+        }
+    }
 }
 
 // Test Case for Task 3
@@ -135,5 +162,10 @@ library.listBooks();
 
 // Test Case for Task 4
 library.lendBook(201, 123456);
+console.log(book1.getDetails());
+console.log(borrower1.borrowedBooks);
+
+// Test Case for Task 5
+library.returnBook(201, 123456);
 console.log(book1.getDetails());
 console.log(borrower1.borrowedBooks);
