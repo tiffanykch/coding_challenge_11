@@ -17,7 +17,6 @@ class Book {
     // Method to modify available copies when book is borrowed or returned
     updateCopies(quantity) {
         this.copies += quantity;
-        return this.getDetails()
     }
 }
 
@@ -32,10 +31,19 @@ console.log(book1.getDetails());
 
 // Create Borrower class to track members that check out books
 class Borrower {
-    constructor(name, borrowerId, borrowedBooks) {
+
+    // // Creating static array of all borrowers to aid Task 4
+    static allBorrowers = []
+
+    constructor(name, borrowerId) {
         this.name = name;
         this.borrowerId = borrowerId;
         this.borrowedBooks = [];
+
+        // Push all new borrower details to array if borrower doesn't already exist 
+        if (!Borrower.allBorrowers.some(borrower => borrower.borrowerId === this.borrowerId)) {
+            Borrower.allBorrowers.push(this);
+        }
     }
 
     // Method that adds books title to array of borrowed books
@@ -73,7 +81,7 @@ console.log(borrower1.borrowedBooks);
 class Library {
     constructor() {
         this.books = [];
-        this.borrowers = [];
+        this.borrowers = Borrower.allBorrowers;
     }
 
     // Method to add new book to the library
@@ -92,9 +100,40 @@ class Library {
         this.books.forEach(borrower => console.log(borrower.getDetails()))
     }
 
+    // TASK 4: IMPLEMENTING BOOK BORROWING
+       // Method to allow members to borrow books if they are available
+    lendBook(borrowerId, isbn) {
+
+        // Identify book in array using isbn
+        const bookIndex = this.books.findIndex(book => book.isbn === isbn);
+
+        // Identify borrower in array using borrower ID
+        const borrowerIndex = this.borrowers.findIndex(borrower => borrower.borrowerId === borrowerId);
+        let borrower = this.borrowers[borrowerIndex];
+              
+        // Check if book exists and has available copies
+        if (bookIndex !== -1 && this.books[bookIndex].copies > 0) {
+
+            // Reduces book copies by 1
+            this.books[bookIndex].copies -= 1;
+
+            // Updates borrower's borrowedBooks list
+            if (borrowerIndex !== -1) {
+                borrower.borrowBook(this.books[bookIndex].title);
+            }
+
+        } else {
+            return `Book not available.`;
+        }
+    }
 }
 
-// Test Case
+// Test Case for Task 3
 const library = new Library();
 library.addBook(book1);
 library.listBooks();
+
+// Test Case for Task 4
+library.lendBook(201, 123456);
+console.log(book1.getDetails());
+console.log(borrower1.borrowedBooks);
