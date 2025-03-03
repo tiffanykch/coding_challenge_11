@@ -16,7 +16,12 @@ class Book {
 
     // Method to modify available copies when book is borrowed or returned
     updateCopies(quantity) {
-        this.copies += quantity;
+        let newCopies = this.copies + quantity
+        if ((newCopies) > 0) {
+            this.copies += quantity;
+        } else {
+            console.log('Sorry! No copies available.');
+        }
     }
 }
 
