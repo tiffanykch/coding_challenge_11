@@ -31,19 +31,10 @@ console.log(book1.getDetails());
 
 // Create Borrower class to track members that check out books
 class Borrower {
-
-    // // Creating static array of all borrowers to aid Task 4
-    static allBorrowers = []
-
     constructor(name, borrowerId) {
         this.name = name;
         this.borrowerId = borrowerId;
         this.borrowedBooks = [];
-
-        // Push all new borrower details to array if borrower doesn't already exist 
-        if (!Borrower.allBorrowers.some(borrower => borrower.borrowerId === this.borrowerId)) {
-            Borrower.allBorrowers.push(this);
-        }
     }
 
     // Method that adds books title to array of borrowed books
@@ -81,7 +72,7 @@ console.log(borrower1.borrowedBooks);
 class Library {
     constructor() {
         this.books = [];
-        this.borrowers = Borrower.allBorrowers;
+        this.borrowers = [];
     }
 
     // Method to add new book to the library
@@ -101,6 +92,17 @@ class Library {
     }
 
     // TASK 4: IMPLEMENTING BOOK BORROWING
+    // Method to add borrowers to array
+    addBorrower(borrower) {
+
+        // Check if book already instantiated by Book class
+        if (borrower instanceof Borrower) {
+            this.borrowers.push(borrower);
+        } else {
+            console.log(`Please provide valid book instance.`)
+        }
+    }
+    
     // Method to allow members to borrow books if they are available
     lendBook(borrowerId, isbn) {
 
@@ -161,6 +163,7 @@ library.addBook(book1);
 library.listBooks();
 
 // Test Case for Task 4
+library.addBorrower(borrower1);
 library.lendBook(201, 123456);
 console.log(book1.getDetails());
 console.log(borrower1.borrowedBooks);
